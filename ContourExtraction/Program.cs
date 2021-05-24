@@ -7,7 +7,6 @@ namespace ContourExtraction
     class Program
     {
         public static string filepath = "";
-        public static string keepInstancesAlive = "";
 
         static void Main(string[] args)
         {
