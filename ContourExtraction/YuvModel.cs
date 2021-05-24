@@ -16,6 +16,7 @@ namespace ContourExtraction
         public int VWidth { get; set; }
         public int VHeight { get; set; }
 
+        public int Mask { get; set; } = 3;
 
         /// <summary>
         /// Total bytes of Y component.
@@ -75,63 +76,6 @@ namespace ContourExtraction
         /// V component full resolution (width * height)
         /// </summary>
         public int VResolution { get { return VWidth * VHeight; } }
-
-
-
-        private string _systemMessage = "";
-        private int _mask;
-        private int _dimensions;
-
-
-        /// <summary>
-        /// Display the corresponding error message for a property, if any.
-        /// </summary>
-        public string SystemMessage
-        {
-            get
-            {
-                return _systemMessage;
-            }
-            set
-            {
-                _systemMessage = value;
-            }
-        }
-
-
-
-        public int Mask
-        {
-            get { return _mask; }
-            set
-            {
-                if (value is not 1 && (value % 2 is 1))
-                    _mask = value;
-                else
-                {
-                    _mask = 3;
-                    _systemMessage = $"\n  [SYSTEM] The mask size was successfully restored using the default value [{_mask}]\n";
-                }
-
-            }
-        }
-
-
-
-        public int Dimensions
-        {
-            get { return _dimensions; }
-            set
-            {
-                if (value is 1 || value is 2)
-                    _dimensions = value;
-                else
-                {
-                    _dimensions = 2;
-                    _systemMessage = $"\n  [SYSTEM] The dimension value was successfully restored using default [{_dimensions}]\n";
-                }
-            }
-        }
 
 
     }
