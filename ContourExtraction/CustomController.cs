@@ -34,8 +34,6 @@ namespace ContourExtraction
         {
 
             _actions.GetInformation();
-            _actions.FileProperties();
-
 
             if (!_actions.ReadFile().IsCompletedSuccessfully)
             {
