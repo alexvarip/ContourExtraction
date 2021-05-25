@@ -12,23 +12,25 @@ namespace ContourExtraction
         private readonly Func<string> _inputProvider;
         private readonly Action<string> _outputProvider;
         private readonly Actions _actions;
+        private readonly Contour _contour;
         private string _outfilepath = "";
 
 
         /// <summary>
         /// Custom controller constructor using Dependecy Injection for handling console input/output and given yuv model.  
         /// </summary>
-        public CustomController(Func<string> inputProvider, Action<string> outputProvider, Actions actions)
+        public CustomController(Func<string> inputProvider, Action<string> outputProvider, Actions actions, Contour contour)
         {
             _inputProvider = inputProvider;
             _outputProvider = outputProvider;
             _actions = actions;
+            _contour = contour;
         }
 
 
 
         /// <summary>
-        /// Reads from a .yuv file and gets all the essential information about it.
+        /// Handles the required actions needed for reading a .yuv file.
         /// </summary>
         public CustomController Build()
         {
@@ -39,7 +41,7 @@ namespace ContourExtraction
             {
                 var ex = _actions.ReadFile().Exception;
                 Console.WriteLine($"\n {ex.Message} \n");
-                Environment.Exit(0);
+                Environment.Exit(-1);
             }
     
             return this;
@@ -48,22 +50,27 @@ namespace ContourExtraction
 
 
         /// <summary>
-        /// Executes the required task, if build was successfull.
+        /// Executes the contour tracing task, if build was successfull.
         /// </summary>
         public CustomController Run()
         {
-            
+            if (!_contour.ContourTracing().IsCompletedSuccessfully)
+            {
+                var ex = _contour.ContourTracing().Exception;
+                Console.WriteLine($"\n {ex} \n");
+                Environment.Exit(-1);
+            }
+
             return this;
         }
 
 
 
         /// <summary>
-        /// Writes the output image to a new .yuv file.
+        /// Writes the generated image to a new .yuv file.
         /// </summary>
         public CustomController Out()
         {
-
             _outfilepath = _actions.CreateFilePath();
             _actions.WriteToFile();
             _outputProvider($"\n\n  Your file is ready to use at the following path:\n  {_outfilepath}");
