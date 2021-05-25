@@ -104,7 +104,7 @@ namespace ContourExtraction
         }
 
 
-        public void FileProperties()
+        private void FileProperties()
         {
             _outputProvider("\n");
             _outputProvider("\n ┌──────────────────────┐ ");
@@ -130,10 +130,8 @@ namespace ContourExtraction
         {
             try
             {
-
                 using (FileStream fsSource = new(Program.filepath, FileMode.Open, FileAccess.Read))
                 {
-
                     // Write y component into a byte array.
                     int numBytesRead = 0;
                     while (_yuv.YTotalBytes > 0)
@@ -185,6 +183,7 @@ namespace ContourExtraction
                     _yuv.VTotalBytes = _yuv.Vbytes.Length;
 
 
+
                     return Task.CompletedTask;
                 }
             }
@@ -200,7 +199,7 @@ namespace ContourExtraction
 
         }
 
-
+       
         public string CreateFilePath()
         {
             string path = $"{Environment.CurrentDirectory}/generated";
@@ -227,11 +226,11 @@ namespace ContourExtraction
                 // Write all component byte arrays to a new .yuv file.
                 using (FileStream fsNew = new(_outfilepath, FileMode.Create, FileAccess.Write))
                 {
-                    for (int i = 0; i < _yuv.YFiltered2D.GetLength(0); i++)
+                    for (int i = 0; i < _yuv.YContour.GetLength(0); i++)
                     {
-                        for (int j = 0; j < _yuv.YFiltered2D.GetLength(1); j++)
+                        for (int j = 0; j < _yuv.YContour.GetLength(1); j++)
                         {
-                            fsNew.WriteByte(_yuv.YFiltered2D[i, j]);
+                            fsNew.WriteByte(_yuv.YContour[i, j]);
                         }
                     }
 
