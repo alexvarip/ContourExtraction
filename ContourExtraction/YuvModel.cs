@@ -32,27 +32,27 @@ namespace ContourExtraction
 
 
         /// <summary>
-        /// For implementing read/wite operations for a .yuv file with one dimensional byte array.
+        /// For implementing read/write operations of all .yuv image file components.
         /// </summary>
         public byte[] Ybytes, Ubytes, Vbytes;
 
 
         /// <summary>
-        /// For implementing border extension from a given one dimensional byte array to two dimensional byte array.
+        /// Stores the .yuv image file's components.
         /// </summary>
         public byte[,] Yplane, Uplane, Vplane;
 
 
         /// <summary>
-        /// One dimensional byte array filled with median values.
+        /// Stores the binary values of the y component.
         /// </summary>
-        public byte[] YFiltered;
+        public byte[,] YBinary;
 
 
         /// <summary>
-        /// Two dimensional array filled with the median values of a converted from one dimensional to two dimensional byte array.
+        /// Stores the final output binary values of the y component.
         /// </summary>
-        public byte[,] YFiltered2D;
+        public byte[,] YContour;
 
 
         /// <summary>
