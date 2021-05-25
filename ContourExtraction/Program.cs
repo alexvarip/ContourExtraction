@@ -12,8 +12,9 @@ namespace ContourExtraction
         {
             var yuv = new YuvModel();
             var helpers = new Helpers(yuv);
+            var contour = new Contour(yuv, helpers);
             var actions = new Actions(Console.ReadLine, Console.Write, yuv, helpers);
-            var controller = new CustomController(Console.ReadLine, Console.Write, actions);
+            var controller = new CustomController(Console.ReadLine, Console.Write, actions, contour);
 
             
             ConfigStartup(args);
