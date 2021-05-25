@@ -1,39 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ContourExtraction
 {
     public class YuvModel
     {
 
+        public int Mask { get; set; } = 3;
         public int YWidth { get; set; }
         public int YHeight { get; set; }
         public int UWidth { get; set; }
         public int UHeight { get; set; }
         public int VWidth { get; set; }
         public int VHeight { get; set; }
-
-        public int Mask { get; set; } = 3;
+        
 
         /// <summary>
         /// Total bytes of Y component.
         /// </summary>
-        public int YTotalBytes { get; set; } //= 240 * 416;
+        public int YTotalBytes { get; set; }
 
 
         /// <summary>
         /// Total bytes of U component.
         /// </summary>
-        public int UTotalBytes { get; set; } //= 120 * 208;
+        public int UTotalBytes { get; set; }
 
 
         /// <summary>
         /// Total bytes of V component.
         /// </summary>
-        public int VTotalBytes { get; set; } //= 120 * 208;
+        public int VTotalBytes { get; set; }
 
 
         /// <summary>
