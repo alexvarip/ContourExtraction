@@ -19,20 +19,15 @@ namespace ContourExtraction
             
             ConfigStartup(args);
 
+            Console.Clear();
+
+            GetAssemblyInfo();
+
+            controller.Build()
+                        .Run()
+                        .Out();
+
             
-            while (true)
-            {
-
-                Console.Clear();
-
-                GetAssemblyInfo();
-
-                controller.Build()
-                          .Run()
-                          .Out();
-
-            }
-
         }
 
 
