@@ -1,6 +1,8 @@
 # Contour Extraction
 
-A console application specifically for yuv image contour extraction.
+[![](https://img.shields.io/github/last-commit/alexvarip/ContourExtraction?style=plastic)](https://github.com/alexvarip/ContourExtraction/)
+
+A console application for yuv image contour extraction.
 The image file size [height x width] must be entered manually after the application starts.
 
  Usage: executable run [path-to-file]
