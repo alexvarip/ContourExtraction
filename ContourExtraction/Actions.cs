@@ -226,11 +226,11 @@ namespace ContourExtraction
                 // Write all component byte arrays to a new .yuv file.
                 using (FileStream fsNew = new(_outfilepath, FileMode.Create, FileAccess.Write))
                 {
-                    for (int i = 0; i < _yuv.YContour.GetLength(0); i++)
+                    for (int i = 0; i < _yuv.YBinary.GetLength(0); i++)
                     {
-                        for (int j = 0; j < _yuv.YContour.GetLength(1); j++)
+                        for (int j = 0; j < _yuv.YBinary.GetLength(1); j++)
                         {
-                            fsNew.WriteByte(_yuv.YContour[i, j]);
+                            fsNew.WriteByte(_yuv.YBinary[i, j]);
                         }
                     }
 
