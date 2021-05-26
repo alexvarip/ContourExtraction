@@ -12,18 +12,19 @@ namespace ContourExtraction
     {
         private readonly YuvModel _yuv;
         private readonly Helpers _helpers;
-        int[] histogram = new int[256];
-        int threshold = 0;
-
+        private int[] histogram = new int[256];
+        private int threshold = 0;
+        private int _mask;
 
         public Contour(YuvModel yuv, Helpers helpers)
         {
             _yuv = yuv;
             _helpers = helpers;
+            _mask = (_yuv.Mask - 1) / 2;
         }
 
 
-        public Task ContourTracing()
+    public Task ContourTracing()
         {
 
             Parallel.Invoke(
@@ -32,6 +33,7 @@ namespace ContourExtraction
                 () => _yuv.Vplane = _helpers.ConvertTo2DArray(_yuv.Vbytes, _yuv.VHeight, _yuv.VWidth));
 
 
+            _yuv.YBinary = new byte[_yuv.YHeight, _yuv.YWidth];
             _yuv.YContour = new byte[_yuv.YHeight, _yuv.YWidth];
 
 
@@ -57,19 +59,13 @@ namespace ContourExtraction
                 }
             }
 
-            //for (int i = 0; i < histogram.Length; i++)
-            //{
-            //    Console.Write($"{i} -> {histogram[i]} \n");
-            //}
-
             return this;
         }
 
 
         private Contour FindThreshold()
         {
-            float weight_B = 0, mean_B = 0;
-            float weight_F = 0, mean_F = 0;
+            float weight_B = 0;
             float sum = 0;
             float sumB = 0;
             float varMax = 0;
@@ -88,17 +84,17 @@ namespace ContourExtraction
 
 
                 // Weight Foreground
-                weight_F = _yuv.YResolution - weight_B;
+                float weight_F = _yuv.YResolution - weight_B;
                 if (weight_F is 0) continue;
 
 
                 sumB += t * histogram[t];
 
                 // Mean Background
-                mean_B = sumB / weight_B;
+                float mean_B = sumB / weight_B;
 
                 // Mean Foreground
-                mean_F = (sum - sumB) / weight_F;
+                float mean_F = (sum - sumB) / weight_F;
 
                 // Calculate Between Class Variance
                 float varBetween = (float)weight_B * (float)weight_F * (mean_B - mean_F) * (mean_B - mean_F);
@@ -118,8 +114,6 @@ namespace ContourExtraction
 
         private Contour Binarize()
         {
-            _yuv.YBinary = new byte[_yuv.YHeight, _yuv.YWidth];
-
             for (int i = 0; i < _yuv.Yplane.GetLength(0); i++)
                 for (int j = 0; j < _yuv.Yplane.GetLength(1); j++)
                     _yuv.YBinary[i, j] = _yuv.Yplane[i, j] < threshold ? (byte)0 : (byte)255;
@@ -130,28 +124,28 @@ namespace ContourExtraction
 
         private Contour ApplyErosion()
         {
+
+            // Erosion is being applied to the non extended byte array version, thus it does not take in the image's border values.
+            // The mask value for the erosion function is fixed to 3, because the B array size to erode with is 3x3.
             // β(A) = A - (A (-) B)
 
-            for (int i = 1; i < _yuv.YBinary.GetLength(0) - 1; i++)
+            for (int i = _mask; i < _yuv.YBinary.GetLength(0) - _mask; i++)
             {
-                for (int j = 1; j < _yuv.YBinary.GetLength(1) - 1; j++) 
+                for (int j = _mask; j < _yuv.YBinary.GetLength(1) - _mask; j++) 
                 {
                     Erosion(i, j);
                 }
             }
 
-
-            for (int i = 1; i < _yuv.YBinary.GetLength(0) - 1; i++)
+            
+            for (int i = _mask; i < _yuv.YBinary.GetLength(0) - _mask; i++)
             {
-                for (int j = 1; j < _yuv.YBinary.GetLength(1) - 1; j++)
+                for (int j = _mask; j < _yuv.YBinary.GetLength(1) - _mask; j++)
                 {
                     if (_yuv.YBinary[i, j] == _yuv.YContour[i, j])
                         _yuv.YBinary[i, j] = 0;
                 }
             }
-
-                        
-                
 
 
             return this;
@@ -168,13 +162,13 @@ namespace ContourExtraction
             };
 
 
-            for (int w = i_index - ((_yuv.Mask - 1) / 2); w <= i_index + ((_yuv.Mask - 1) / 2); w++)
+            for (int w = i_index - _mask; w <= i_index + _mask; w++)
             {
-                for (int z = j_index - ((_yuv.Mask - 1) / 2); z <= j_index + ((_yuv.Mask - 1) / 2); z++)
+                for (int z = j_index - _mask; z <= j_index + _mask; z++)
                 {
                     if (_yuv.YBinary[w, z] == B[x, y])
                         count++;
-                    
+
                     y++;
                 }
                 x++;
