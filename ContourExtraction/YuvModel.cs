@@ -44,13 +44,13 @@ namespace ContourExtraction
 
 
         /// <summary>
-        /// Stores the binary values of the y component.
+        /// Stores the final output binary values of the y component.
         /// </summary>
         public byte[,] YBinary;
 
 
         /// <summary>
-        /// Stores the final output binary values of the y component.
+        /// Stores the binary values of the y component.
         /// </summary>
         public byte[,] YContour;
 
