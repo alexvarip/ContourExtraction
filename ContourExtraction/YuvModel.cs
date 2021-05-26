@@ -4,7 +4,7 @@ namespace ContourExtraction
     public class YuvModel
     {
 
-        public int Mask { get; set; } = 3;
+        public int Mask { get; } = 3;
         public int YWidth { get; set; }
         public int YHeight { get; set; }
         public int UWidth { get; set; }
@@ -32,25 +32,25 @@ namespace ContourExtraction
 
 
         /// <summary>
-        /// For implementing read/write operations of all .yuv image file components.
+        /// Stores the yuv image components.
         /// </summary>
         public byte[] Ybytes, Ubytes, Vbytes;
 
 
         /// <summary>
-        /// Stores the .yuv image file's components.
+        /// Stores the yuv image components.
         /// </summary>
         public byte[,] Yplane, Uplane, Vplane;
 
 
         /// <summary>
-        /// Stores the final output binary values of the y component.
+        /// Stores the binary values (0/1 as 255) of the yuv image's y component.
         /// </summary>
         public byte[,] YBinary;
 
 
         /// <summary>
-        /// Stores the binary values of the y component.
+        /// Stores the binary values (0/1 as 255) of the yuv image's y component after erosion has been applied.
         /// </summary>
         public byte[,] YContour;
 
